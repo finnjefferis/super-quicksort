@@ -1,3 +1,12 @@
+PACKAGES USED:
+
+termplotlib -
+https://github.com/nschloe/termplotlib
+
+numpy -
+https://github.com/numpy/numpy
+
+
 SOURCES USED:
 
 Quick sort visualiser-

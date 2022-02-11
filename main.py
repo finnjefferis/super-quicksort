@@ -1,46 +1,82 @@
-#SUPER QUICKSORT
-                                                                                            
+# SUPER QUICKSORT
+
 import numpy as np
 import termplotlib as tpl
 
 
-#initialise array of randomised integers
-randnums = np.random.randint(1, 101, 12)
-
-#declare start and end values
-start = randnums[0]
-end = randnums[11]
-
-#declare pivot
-pivot = start
-
-#print values to console
+# print values to console
 print("""███████╗██╗   ██╗██████╗ ███████╗██████╗      ██████╗ ██╗   ██╗██╗ ██████╗██╗  ██╗███████╗ ██████╗ ██████╗ ████████╗
 ██╔════╝██║   ██║██╔══██╗██╔════╝██╔══██╗    ██╔═══██╗██║   ██║██║██╔════╝██║ ██╔╝██╔════╝██╔═══██╗██╔══██╗╚══██╔══╝
 ███████╗██║   ██║██████╔╝█████╗  ██████╔╝    ██║   ██║██║   ██║██║██║     █████╔╝ ███████╗██║   ██║██████╔╝   ██║   
 ╚════██║██║   ██║██╔═══╝ ██╔══╝  ██╔══██╗    ██║▄▄ ██║██║   ██║██║██║     ██╔═██╗ ╚════██║██║   ██║██╔══██╗   ██║   
 ███████║╚██████╔╝██║     ███████╗██║  ██║    ╚██████╔╝╚██████╔╝██║╚██████╗██║  ██╗███████║╚██████╔╝██║  ██║   ██║   
-╚══════╝ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═╝     ╚══▀▀═╝  ╚═════╝ ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
+╚══════╝ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═╝     ╚══▀▀═╝  ╚═════╝ ╚═╝ ╚═════╝╚═╝  ╚═╝╚═════
+═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
                                                                                                                     """)
-print (randnums)
-print("Pivot is " +str(pivot))
-rng = np.random.default_rng(123)
-sample = rng.standard_normal(size=1000)
-counts, bin_edges = np.histogram(sample)
 
+# initialise array of randomised integers
+randnums = np.random.randint(1, 12, 12)
+
+# declare start and end values
+start = randnums[0]
+end = randnums[11]
+
+# declare pivot
+pivot = start
+print("Pivot is " + str(pivot))
+print("Unsorted values graph")
 fig = tpl.figure()
-fig.hist(counts, bin_edges, orientation="horizontal", force_ascii=False)
+fig.barh(randnums, force_ascii=False)
 fig.show()
 
 
-#move the element at the start of the array towards the end until it reaches a value greater or equal to the PIVOT
-while start < end:
-    while start < len(randnums) and randnums[start] <= pivot:
-            start += 1
+def partition(array, start, end):
+    pivot = array[start]
+    low = start + 1
+    high = end
 
-#move the end element towards the start of the array until it crosses the start bound or finds a value less than the pivot 
-    while randnums[end] > pivot:
-        end -= 1
-         
-             
+    while True:
+        # If the current value we're looking at is larger than the pivot
+        # it's in the right place (right side of pivot) and we can move left,
+        # to the next element.
+        # We also need to make sure we haven't surpassed the low pointer, since that
+        # indicates we have already moved all the elements to their correct side of the pivot
+        while low <= high and array[high] >= pivot:
+            high = high - 1
 
+        # Opposite process of the one above
+        while low <= high and array[low] <= pivot:
+            low = low + 1
+
+        # We either found a value for both high and low that is out of order
+        # or low is higher than high, in which case we exit the loop
+        if low <= high:
+            array[low], array[high] = array[high], array[low]
+            # The loop continues
+        else:
+            # We exit out of the loop
+            break
+
+    array[start], array[high] = array[high], array[start]
+
+    return high
+
+def quick_sort(array, start, end):
+    if start >= end:
+        return
+
+    p = partition(array, start, end)
+    quick_sort(array, start, p-1)
+    quick_sort(array, p+1, end)
+    
+
+
+
+
+array = randnums
+
+sorted = quick_sort(array, 0, len(array) - 1)
+print("Sorted values graph")
+fig = tpl.figure()
+fig.barh(array, force_ascii=False)
+fig.show()
