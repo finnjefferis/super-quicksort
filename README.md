@@ -1,3 +1,5 @@
+Quick-sort algorithm written in Python using termplotlib to visualise results in-terminal.
+
 PACKAGES USED:
 
 termplotlib -
